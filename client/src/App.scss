@@ -1,0 +1,51 @@
+.App {
+  padding: 5vh 5vw;
+  header{
+    font-size: 30px;
+    margin-bottom: 3%;
+  }
+  .home{
+    background: lightgrey;
+    display: flex;
+    padding: 2em;
+    justify-content: flex-start;
+    
+    form{
+      
+      flex:1;
+      background: lightcyan;
+      padding: 1em;
+      
+      .name, .amount, .date, .vendor{
+        display: block;
+        margin-bottom:3%;
+
+      }
+      .purchaser {
+        margin-bottom: 1em;
+      }
+      .categories {
+        font-size: .75em;
+        margin-bottom: 2em;
+
+      }
+    }
+    .content{
+      background: rgb(255, 224, 229);
+      flex:3;
+      padding: 1em;
+      .details {
+        display:flex;
+        flex:1;
+        p{
+          margin-right: 2em;  
+          width:15%;
+        }
+      }
+    }
+
+  }
+
+  
+}
+

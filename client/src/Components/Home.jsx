@@ -12,6 +12,8 @@ const Home = () => {
     const [editMode, setEditMode] = useState(false)
     const [currentItem, setCurrentItem] = useState({})
     const [selected, setSelected] = useState()
+    const [sortKey, setSortKey] = useState('')
+    const [sortDir, setSortDir] = useState(true)
 
     useEffect(() => {
         const getAllCategories = async () => {
@@ -40,7 +42,7 @@ const Home = () => {
         console.log(e.target.name, e.target.value, e.target.type, e.target.checked)
         let key, value, newItem
         if (e.target.type === 'checkbox') {
-            newItem = {...currentItem}
+            newItem = { ...currentItem }
             if (editMode) {
 
                 if ('categories' in newItem.fields) {
@@ -60,7 +62,7 @@ const Home = () => {
 
 
             } else {
-                newItem = {...item}
+                newItem = { ...item }
                 console.log('not edit')
                 if ('categories' in newItem) {
                     console.log('remove nw')
@@ -108,7 +110,7 @@ const Home = () => {
         console.log(categories)
         const newItem = {
             name: name,
-            amount: parseInt(amount),
+            amount: parseFloat(amount),
             vendor: vendor,
             categories: categories,
             date: date,
@@ -120,6 +122,8 @@ const Home = () => {
             const newItems = [...items.map((el, i) => el.id === id ? updatedItem[0] : el)]
             setItems(newItems)
             setEditMode(false)
+            setItem({})
+            setSelected()
         } else {
             const postedItem = await createItem(newItem)
             setItems([...items, ...postedItem.records])
@@ -144,20 +148,58 @@ const Home = () => {
         console.log(blah)
         setItems(blah)
     }
+    const alphaSort = (array, sortParam) => {
+        const compare = (a, b) => {
+            let paramA
+            let paramB
+            if(sortParam === 'date'){
+                paramA = Date.parse(a.fields[sortParam])
+                paramB = Date.parse(b.fields[sortParam])
 
-    const compare = (a, b) => {
-        if (a.fields.Name < b.fields.Name) {
-            return -1;
+            }else{
+
+                paramA = a.fields[sortParam]
+                paramB = b.fields[sortParam]
+            }
+            if (sortDir) {
+                
+                if (paramA < paramB) {
+                    return -1;
+                }
+                if (paramA > paramB) {
+                    return 1;
+                }
+            } else if(Object.keys(array[0].fields).includes('vendor')) {
+                console.log('here', array)
+                
+                if (paramA > paramB) {
+                    return -1;
+                }
+                if (paramA < paramB) {
+                    return 1;
+                }
+
+            }
+            return 0;
+
         }
-        if (a.fields.Name > b.fields.Name) {
-            return 1;
-        }
-        return 0;
+        array.sort(compare)
+        return array
+
     }
+
+    const sortByHeader = (key) => {
+        setSortKey(key)
+        setSortDir(!sortDir)
+    }
+
 
     const { date, vendor, name, amount, purchaser } = editMode ? currentItem.fields || '' : item
     const cats = editMode ? currentItem.fields.categories || [] : item.categories || []
     // console.log(cats)
+    let total = 0
+    let lyssieTotal = 0
+    let marcaTotal = 0
     return (
         <div className='home'>
 
@@ -198,6 +240,7 @@ const Home = () => {
                     name='amount'
                     id={item.amount}
                     type='number'
+                    step='0.01'
                     value={amount || ''}
                     onChange={handleChange}
                 />
@@ -228,7 +271,7 @@ const Home = () => {
                     />
                 </div>
                 <div className='categories'>
-                    {categories && categories.sort(compare).map((e, i) => (
+                    {alphaSort(categories, 'name').map((e, i) => (
                         <div key={i} className='category'>
                             {/* {console.log(cats.includes(e.fields.name))}
                             {console.log('e', e.fields.name)} */}
@@ -255,22 +298,46 @@ const Home = () => {
                 />
             </form>
             <div className='content'>
+                <div className='details-header'>
+                    <p onClick={() => sortByHeader('date')}>Date</p>
+                    <p onClick={() => sortByHeader('vendor')}>Vendor</p>
+                    <p onClick={() => sortByHeader('name')}>Name</p>
+                    <p onClick={() => sortByHeader('amount')} className='amount'>Amount</p>
+                    <p onClick={() => sortByHeader('purchaser')}>Purchaser</p>
+                    <p>Categories</p>
+                    <p>delete</p>
+                </div>
 
 
-                {items.map((e, i) => (
+
+                <div className='temp'>          
+                {alphaSort(items, sortKey).map((e, i) => {
+                    total += parseFloat(e.fields.amount)
+                    lyssieTotal += parseFloat(e.fields.purchaser === 'Lyssie' ? e.fields.amount : 0)
+                    return (
                     <div
                         className='details'
                         onClick={(evt) => handleUpdate(evt, e.id, i)}
                         style={selected === i ? { background: '#f9c3c3' } : {}}>
-                        <p>{new Date(e.fields.date).toDateString()}</p>
+                        <p>{new Date(e.fields.date + ' ').toLocaleDateString()}</p>
                         <p>{e.fields.vendor}</p>
                         <p>{e.fields.name}</p>
-                        <p>{e.fields.amount}</p>
+                        <p className='amount'>{e.fields.amount.toFixed(2)}</p>
                         <p>{e.fields.purchaser}</p>
-                        <p onClick={(evt) => handleDelete(evt, e.id)}>X</p>
 
+                        <div className='cats'>{categories.filter(el => e.fields.categories.includes(el.id)).map(f => <p>{f.fields.name}</p>)}</div>
+                        <p onClick={(evt) => handleDelete(evt, e.id)}>X</p>
+                        
                     </div>
-                ))}
+                    )
+                })}
+                </div>
+
+                <div className='total'>
+                    {'Total: ' + total.toFixed(2)}
+                    {'TotalL: ' + lyssieTotal.toFixed(2)}
+
+                </div>
 
             </div>
         </div>

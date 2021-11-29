@@ -10,6 +10,9 @@ export const getCategories = async () => {
     throw error;
   }
 }
+
+
+
 export const getItems = async () => {
   try {
     // const resp = await api.get('/items')

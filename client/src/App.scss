@@ -1,51 +1,93 @@
 .App {
   padding: 5vh 5vw;
-  header{
+  header {
     font-size: 30px;
     margin-bottom: 3%;
   }
-  .home{
+  .home {
     background: lightgrey;
     display: flex;
     padding: 2em;
     justify-content: flex-start;
-    
-    form{
-      
-      flex:1;
+    max-height: 60vh;
+
+    form {
+      flex: 1;
       background: lightcyan;
       padding: 1em;
-      
-      .name, .amount, .date, .vendor{
-        display: block;
-        margin-bottom:3%;
+      border: 1px solid;
 
+      .name,
+      .amount,
+      .date,
+      .vendor {
+        display: block;
+        margin-bottom: 3%;
       }
       .purchaser {
         margin-bottom: 1em;
       }
       .categories {
-        font-size: .75em;
+        font-size: 0.75em;
         margin-bottom: 2em;
-
       }
     }
-    .content{
-      background: rgb(255, 224, 229);
-      flex:3;
-      padding: 1em;
-      .details {
-        display:flex;
-        flex:1;
-        p{
-          margin-right: 2em;  
-          width:15%;
+    .content {
+      flex: 4;
+      margin: 0 1em;
+      border: 1px solid;
+      position: relative;
+      .details-header {
+        &:first-child {
+          background-color: rgb(119, 70, 70);
+          color: lightcyan;
+          cursor: pointer;
         }
       }
+      .details {
+        &:nth-child(even) {
+          background-color: #dffbff;
+        }
+        &:nth-child(odd) {
+          background-color: #f5fafd;
+        }
+      }
+      .details,
+      .details-header {
+        display: flex;
+        flex: 1;
+        font-weight: 300;
+        font-size: 0.8em;
+
+        p,
+        div {
+          margin-right: 0;
+          flex: 1;
+          padding: 0 1em;
+        }
+        .amount {
+          text-align: right;
+          margin-right: 80px;
+        }
+        .cats {
+          font-size: 10px;
+          p {
+            background: rgb(192, 192, 250);
+            color: rgb(0, 0, 0);
+            margin: 1em;
+            padding: 0.2em;
+          }
+        }
+      }
+      .temp {
+        overflow: auto;
+        height: 90%;
+      }
+      .total {
+        position: absolute;
+        bottom: 0;
+        left: 0;
+      }
     }
-
   }
-
-  
 }
-

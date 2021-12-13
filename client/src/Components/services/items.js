@@ -13,10 +13,20 @@ export const getCategories = async () => {
 
 
 
-export const getItems = async () => {
+export const getItems = async (offset) => {
   try {
     // const resp = await api.get('/items')
-    const resp = await api.get(`https://api.airtable.com/v0/appjKXvjcVViPcAcb/Expense?maxRecords=30&view=Grid%20view`);
+    const resp = await api.get(`https://api.airtable.com/v0/appjKXvjcVViPcAcb/Expense?view=Grid%20view`);
+    return resp
+  } catch (error) {
+    throw error
+  }
+}
+
+export const getItemsWithOffset = async (offset) => {
+  try {
+    // const resp = await api.get('/items')
+    const resp = await api.get(`https://api.airtable.com/v0/appjKXvjcVViPcAcb/Expense?offset=${offset}`);
     return resp
   } catch (error) {
     throw error

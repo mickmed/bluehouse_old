@@ -35,11 +35,6 @@ const Home = () => {
         getAllItems()
     }, [])
 
-
-
-
-
-
     useEffect(() => {
         const getAllItems = async () => {
 
@@ -55,7 +50,6 @@ const Home = () => {
         getAllItems()
     }, [offset])
 
-
     const getAllItems = async () => {
         let resp = await getItems()
         if (resp.data.records.length === 100) {
@@ -65,9 +59,6 @@ const Home = () => {
             setAttTotals({})
         }
     }
-
-
-
 
     const handleChange = (e) => {
         let key, value, newItem
@@ -82,15 +73,10 @@ const Home = () => {
                         console.log('false')
                         const index = newItem.fields.categories.indexOf(e.target.id)
                         newItem.fields.categories.splice(index, 1)
-
                     }
-
-
                 } else {
                     newItem.fields.categories = [e.target.id]
                 }
-
-
             } else {
                 newItem = { ...item }
                 console.log('not edit')
@@ -107,7 +93,6 @@ const Home = () => {
                 console.log(newItem)
             }
 
-
             editMode ?
                 setCurrentItem(newItem) :
                 setItem(newItem)
@@ -122,17 +107,12 @@ const Home = () => {
         }
     }
 
-
     const handleUpdate = async (e, id, i) => {
         const current = await getItemById(id)
         setCurrentItem(current)
         setSelected(i)
-
         setEditMode(true)
-
     }
-
-
 
     const handleSubmit = async (e, id) => {
         e.preventDefault()
@@ -145,7 +125,6 @@ const Home = () => {
             date: date,
             purchaser: purchaser
         }
-        console.log(newItem)
         if (editMode) {
             const updatedItem = await updateItem(newItem, id)
             const newItems = [...items.map((el, i) => el.id === id ? updatedItem[0] : el)]
@@ -158,19 +137,10 @@ const Home = () => {
             setItems([...items, ...postedItem.records])
 
         }
-
-
-
-
-
     }
 
-
-
     const handleDelete = (e, id) => {
-
         e.preventDefault()
-        console.log(id)
         deleteItem(id)
         let filteredItems = [...items].filter(el => el.id !== id)
         setItems(filteredItems)
@@ -215,14 +185,11 @@ const Home = () => {
     }
 
     const sortObject = (obj, att) => {
-
         if (att !== 'amount') {
-
             let sortedObj = Object.keys(obj).sort().reduce(function (result, key) {
                 result[key] = obj[key];
                 return result;
             }, {});
-            
             setAttTotals(sortedObj)
 
         } else {
@@ -240,7 +207,6 @@ const Home = () => {
             })
             setAttTotals(objSorted)
             setSortDir(!sortDir)
-
         }
 
 

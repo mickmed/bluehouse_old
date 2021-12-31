@@ -6,7 +6,7 @@ let apiUrl
 
 const apiUrls = {
   production: 'https://sei-items-api.herokuapp.com/api',
-  development: 'http://localhost:3000/api'
+  development: process.env.REACT_APP_AIRTABLE_BASE_URL
 }
 
 if (window.location.hostname === 'localhost') {
@@ -19,8 +19,7 @@ const api = Axios.create({
   baseURL: apiUrl,
   headers: {
     // 'Access-Control-Allow-Origin': '*',
-    'Authorization': 'Bearer keyo8sUlHJDXOMBml'
+    'Authorization': `Bearer ${process.env.REACT_APP_BEARER_KEY}`
   }
 })
-
 export default api
